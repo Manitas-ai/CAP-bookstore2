@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@sap/cds-dk": "^10",
-    "@cap-js/sqlite": "^1"
+    "@cap-js/sqlite": "^2"
   },
   "cds": {
     "requires": {
