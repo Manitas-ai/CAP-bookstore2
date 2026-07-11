@@ -1,0 +1,35 @@
+{
+  "name": "bookstore2",
+  "version": "1.0.0",
+  "description": "SAP Business ByDesign Book Store – Internal PoC",
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch"
+  },
+  "dependencies": {
+    "@sap/cds": "^8"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^8"
+  },
+  "optionalDependencies": {
+    "@cap-js/sqlite": "^1"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        }
+      }
+    },
+    "[production]": {
+      "requires": {
+        "db": {
+          "kind": "hana"
+        }
+      }
+    }
+  }
+}

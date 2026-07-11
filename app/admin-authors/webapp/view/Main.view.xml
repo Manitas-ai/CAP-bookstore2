@@ -1,0 +1,110 @@
+<mvc:View
+  controllerName="my.bookstore.adminauthors.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  displayBlock="true">
+
+  <App>
+    <pages>
+      <Page title="Authors Administration" showNavButton="false">
+
+        <headerContent>
+          <Button text="Home" icon="sap-icon://home" press=".onHome" />
+        </headerContent>
+
+        <content>
+          <Table
+            id="authorsTable"
+            items="{path: '/Authors', parameters: { $orderby: 'name' }}"
+            growing="true"
+            growingThreshold="20"
+            noDataText="No authors found. Create the first one!">
+
+            <headerToolbar>
+              <OverflowToolbar>
+                <Title text="Authors" level="H3" />
+                <ToolbarSpacer />
+                <Button
+                  text="Add Author"
+                  type="Emphasized"
+                  icon="sap-icon://add"
+                  press=".onAddAuthor" />
+              </OverflowToolbar>
+            </headerToolbar>
+
+            <columns>
+              <Column width="25%"><Text text="Name" /></Column>
+              <Column width="15%"><Text text="Country" /></Column>
+              <Column width="45%"><Text text="Biography" /></Column>
+              <Column width="15%" hAlign="Center"><Text text="Actions" /></Column>
+            </columns>
+
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <Text text="{name}" />
+                  <Text text="{country}" />
+                  <Text text="{biography}" wrapping="true" maxLines="2" />
+                  <HBox justifyContent="Center">
+                    <Button
+                      icon="sap-icon://edit"
+                      tooltip="Edit Author"
+                      press=".onEditAuthor"
+                      type="Transparent" />
+                    <Button
+                      icon="sap-icon://delete"
+                      tooltip="Delete Author"
+                      press=".onDeleteAuthor"
+                      type="Transparent" />
+                  </HBox>
+                </cells>
+              </ColumnListItem>
+            </items>
+
+          </Table>
+        </content>
+
+      </Page>
+    </pages>
+  </App>
+
+  <!-- ========================  Author Dialog  ======================== -->
+  <mvc:View.dependents>
+    <Dialog id="authorDialog" title="Author" contentWidth="480px">
+      <content>
+        <VBox class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+
+          <Label text="Name" required="true" class="sapUiTinyMarginBottom" />
+          <Input
+            id="inputName"
+            placeholder="Full name"
+            valueLiveUpdate="true"
+            class="sapUiSmallMarginBottom" />
+
+          <Label text="Country" class="sapUiTinyMarginBottom" />
+          <Input
+            id="inputCountry"
+            placeholder="e.g. Germany"
+            class="sapUiSmallMarginBottom" />
+
+          <Label text="Biography" class="sapUiTinyMarginBottom" />
+          <TextArea
+            id="inputBio"
+            placeholder="Short biography..."
+            rows="5"
+            width="100%"
+            growing="true" />
+
+        </VBox>
+      </content>
+      <beginButton>
+        <Button id="btnSaveAuthor" text="Save" type="Emphasized" press=".onSaveAuthor" />
+      </beginButton>
+      <endButton>
+        <Button text="Cancel" press=".onCancelDialog" />
+      </endButton>
+    </Dialog>
+  </mvc:View.dependents>
+
+</mvc:View>

@@ -1,0 +1,146 @@
+<mvc:View
+  controllerName="my.bookstore.adminbooks.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  displayBlock="true">
+
+  <App>
+    <pages>
+      <Page title="Books Administration" showNavButton="false">
+
+        <headerContent>
+          <Button text="Home" icon="sap-icon://home" press=".onHome" />
+        </headerContent>
+
+        <content>
+          <Table
+            id="booksTable"
+            items="{
+              path: '/Books',
+              parameters: { $expand: 'author', $orderby: 'title' }
+            }"
+            growing="true"
+            growingThreshold="20"
+            noDataText="No books found. Add the first one!">
+
+            <headerToolbar>
+              <OverflowToolbar>
+                <Title text="Books" level="H3" />
+                <ToolbarSpacer />
+                <Button
+                  text="Add Book"
+                  type="Emphasized"
+                  icon="sap-icon://add"
+                  press=".onAddBook" />
+              </OverflowToolbar>
+            </headerToolbar>
+
+            <columns>
+              <Column width="25%"><Text text="Title" /></Column>
+              <Column width="18%"><Text text="Author" /></Column>
+              <Column width="12%"><Text text="Category" /></Column>
+              <Column width="7%"  hAlign="Center"><Text text="Year" /></Column>
+              <Column width="10%" hAlign="End"><Text text="Price (EUR)" /></Column>
+              <Column width="18%"><Text text="Description" /></Column>
+              <Column width="10%" hAlign="Center"><Text text="Actions" /></Column>
+            </columns>
+
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <Text text="{title}" maxLines="1" />
+                  <Text text="{author/name}" />
+                  <ObjectStatus text="{category}" state="Information" />
+                  <Text text="{publicationYear}" />
+                  <Text text="{
+                    path: 'price',
+                    type: 'sap.ui.model.odata.type.Decimal',
+                    formatOptions: { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                  }" />
+                  <Text text="{description}" wrapping="true" maxLines="2" />
+                  <HBox justifyContent="Center">
+                    <Button icon="sap-icon://edit"   tooltip="Edit Book"   press=".onEditBook"   type="Transparent" />
+                    <Button icon="sap-icon://delete" tooltip="Delete Book" press=".onDeleteBook" type="Transparent" />
+                  </HBox>
+                </cells>
+              </ColumnListItem>
+            </items>
+
+          </Table>
+        </content>
+
+      </Page>
+    </pages>
+  </App>
+
+  <!-- ========================  Book Dialog  ======================== -->
+  <mvc:View.dependents>
+    <Dialog id="bookDialog" title="Book" contentWidth="520px">
+      <content>
+        <VBox class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+
+          <Label text="Title" required="true" class="sapUiTinyMarginBottom" />
+          <Input
+            id="inputTitle"
+            placeholder="Book title"
+            class="sapUiSmallMarginBottom" />
+
+          <Label text="Author" required="true" class="sapUiTinyMarginBottom" />
+          <Select
+            id="selectAuthor"
+            width="100%"
+            class="sapUiSmallMarginBottom"
+            forceSelection="false">
+            <core:Item key="" text="– Select author –" />
+          </Select>
+
+          <Label text="Category" class="sapUiTinyMarginBottom" />
+          <Select id="selectCategory" width="100%" class="sapUiSmallMarginBottom">
+            <core:Item key=""                  text="– Select category –" />
+            <core:Item key="Finance"           text="Finance" />
+            <core:Item key="Procurement"       text="Procurement" />
+            <core:Item key="CRM"               text="CRM" />
+            <core:Item key="HR"                text="HR" />
+            <core:Item key="Manufacturing"     text="Manufacturing" />
+            <core:Item key="Supply Chain"      text="Supply Chain" />
+            <core:Item key="Project Management" text="Project Management" />
+            <core:Item key="Integration"       text="Integration" />
+            <core:Item key="Analytics"         text="Analytics" />
+            <core:Item key="General"           text="General" />
+          </Select>
+
+          <Label text="Publication Year" class="sapUiTinyMarginBottom" />
+          <Input
+            id="inputYear"
+            placeholder="e.g. 2024"
+            type="Number"
+            class="sapUiSmallMarginBottom" />
+
+          <Label text="Price (EUR)" class="sapUiTinyMarginBottom" />
+          <Input
+            id="inputPrice"
+            placeholder="e.g. 49.90"
+            type="Number"
+            class="sapUiSmallMarginBottom" />
+
+          <Label text="Description" class="sapUiTinyMarginBottom" />
+          <TextArea
+            id="inputDescription"
+            placeholder="Short description..."
+            rows="4"
+            width="100%"
+            growing="true" />
+
+        </VBox>
+      </content>
+      <beginButton>
+        <Button text="Save" type="Emphasized" press=".onSaveBook" />
+      </beginButton>
+      <endButton>
+        <Button text="Cancel" press=".onCancelDialog" />
+      </endButton>
+    </Dialog>
+  </mvc:View.dependents>
+
+</mvc:View>

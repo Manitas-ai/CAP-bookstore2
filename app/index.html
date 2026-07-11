@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAP ByD Book Store</title>
+  <style>
+    body { font-family: "72", Arial, sans-serif; margin: 0; background: #f5f6f7; color: #32363a; }
+    .header { background: #0a6ed1; color: #fff; padding: 24px 40px; }
+    .header h1 { margin: 0; font-size: 28px; font-weight: 300; }
+    .header p  { margin: 6px 0 0; font-size: 14px; opacity: .85; }
+    .container { max-width: 900px; margin: 48px auto; padding: 0 24px; }
+    .cards { display: flex; gap: 24px; flex-wrap: wrap; }
+    .card { flex: 1; min-width: 220px; background: #fff; border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 28px 24px;
+            text-decoration: none; color: inherit; transition: box-shadow .2s; }
+    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+    .card .icon { font-size: 36px; margin-bottom: 12px; }
+    .card h2 { margin: 0 0 8px; font-size: 18px; color: #0a6ed1; }
+    .card p  { margin: 0; font-size: 13px; color: #6a6d70; line-height: 1.5; }
+    .footer { text-align: center; margin-top: 56px; font-size: 12px; color: #89919a; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>SAP Business ByDesign Book Store</h1>
+    <p>Internal PoC – Browse books and manage the catalog</p>
+  </div>
+  <div class="container">
+    <div class="cards">
+      <a class="card" href="/bookshop/webapp/index.html">
+        <div class="icon">📚</div>
+        <h2>Books Overview</h2>
+        <p>Browse all SAP ByDesign books available in the store.</p>
+      </a>
+      <a class="card" href="/admin-authors/webapp/index.html">
+        <div class="icon">✍️</div>
+        <h2>Authors</h2>
+        <p>Create and maintain author profiles, biographies, and countries.</p>
+      </a>
+      <a class="card" href="/admin-books/webapp/index.html">
+        <div class="icon">🛠️</div>
+        <h2>Books Admin</h2>
+        <p>Add and manage books – title, author, category, price, and more.</p>
+      </a>
+    </div>
+    <div class="footer">SAP Business ByDesign Book Store · Internal PoC</div>
+  </div>
+</body>
+</html>
