@@ -7,10 +7,10 @@
     "watch": "cds watch"
   },
   "dependencies": {
-    "@sap/cds": "^8"
+    "@sap/cds": "^10"
   },
   "devDependencies": {
-    "@sap/cds-dk": "^8"
+    "@sap/cds-dk": "^10"
   },
   "optionalDependencies": {
     "@cap-js/sqlite": "^1"
