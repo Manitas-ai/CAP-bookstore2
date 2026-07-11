@@ -7,7 +7,8 @@
     "watch": "cds watch"
   },
   "dependencies": {
-    "@sap/cds": "^10"
+    "@sap/cds": "^10",
+    "@sap/xssec": "^4"
   },
   "devDependencies": {
     "@sap/cds-dk": "^10",
