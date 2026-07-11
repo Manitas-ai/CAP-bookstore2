@@ -16,10 +16,7 @@
         <content>
           <Table
             id="booksTable"
-            items="{
-              path: '/Books',
-              parameters: { $expand: 'author', $orderby: 'title' }
-            }"
+            items="{path: '/Books', parameters: { $expand: 'author', $orderby: 'title' }}"
             growing="true"
             growingThreshold="20"
             noDataText="No books found. Add the first one!">
@@ -73,74 +70,5 @@
       </Page>
     </pages>
   </App>
-
-  <!-- ========================  Book Dialog  ======================== -->
-  <mvc:View.dependents>
-    <Dialog id="bookDialog" title="Book" contentWidth="520px">
-      <content>
-        <VBox class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
-
-          <Label text="Title" required="true" class="sapUiTinyMarginBottom" />
-          <Input
-            id="inputTitle"
-            placeholder="Book title"
-            class="sapUiSmallMarginBottom" />
-
-          <Label text="Author" required="true" class="sapUiTinyMarginBottom" />
-          <Select
-            id="selectAuthor"
-            width="100%"
-            class="sapUiSmallMarginBottom"
-            forceSelection="false">
-            <core:Item key="" text="– Select author –" />
-          </Select>
-
-          <Label text="Category" class="sapUiTinyMarginBottom" />
-          <Select id="selectCategory" width="100%" class="sapUiSmallMarginBottom">
-            <core:Item key=""                  text="– Select category –" />
-            <core:Item key="Finance"           text="Finance" />
-            <core:Item key="Procurement"       text="Procurement" />
-            <core:Item key="CRM"               text="CRM" />
-            <core:Item key="HR"                text="HR" />
-            <core:Item key="Manufacturing"     text="Manufacturing" />
-            <core:Item key="Supply Chain"      text="Supply Chain" />
-            <core:Item key="Project Management" text="Project Management" />
-            <core:Item key="Integration"       text="Integration" />
-            <core:Item key="Analytics"         text="Analytics" />
-            <core:Item key="General"           text="General" />
-          </Select>
-
-          <Label text="Publication Year" class="sapUiTinyMarginBottom" />
-          <Input
-            id="inputYear"
-            placeholder="e.g. 2024"
-            type="Number"
-            class="sapUiSmallMarginBottom" />
-
-          <Label text="Price (EUR)" class="sapUiTinyMarginBottom" />
-          <Input
-            id="inputPrice"
-            placeholder="e.g. 49.90"
-            type="Number"
-            class="sapUiSmallMarginBottom" />
-
-          <Label text="Description" class="sapUiTinyMarginBottom" />
-          <TextArea
-            id="inputDescription"
-            placeholder="Short description..."
-            rows="4"
-            width="100%"
-            growing="true" />
-
-        </VBox>
-      </content>
-      <beginButton>
-        <Button text="Save" type="Emphasized" press=".onSaveBook" />
-      </beginButton>
-      <endButton>
-        <Button text="Cancel" press=".onCancelDialog" />
-      </endButton>
-    </Dialog>
-  </mvc:View.dependents>
 
 </mvc:View>

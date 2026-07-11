@@ -69,42 +69,5 @@
     </pages>
   </App>
 
-  <!-- ========================  Author Dialog  ======================== -->
-  <mvc:View.dependents>
-    <Dialog id="authorDialog" title="Author" contentWidth="480px">
-      <content>
-        <VBox class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
-
-          <Label text="Name" required="true" class="sapUiTinyMarginBottom" />
-          <Input
-            id="inputName"
-            placeholder="Full name"
-            valueLiveUpdate="true"
-            class="sapUiSmallMarginBottom" />
-
-          <Label text="Country" class="sapUiTinyMarginBottom" />
-          <Input
-            id="inputCountry"
-            placeholder="e.g. Germany"
-            class="sapUiSmallMarginBottom" />
-
-          <Label text="Biography" class="sapUiTinyMarginBottom" />
-          <TextArea
-            id="inputBio"
-            placeholder="Short biography..."
-            rows="5"
-            width="100%"
-            growing="true" />
-
-        </VBox>
-      </content>
-      <beginButton>
-        <Button id="btnSaveAuthor" text="Save" type="Emphasized" press=".onSaveAuthor" />
-      </beginButton>
-      <endButton>
-        <Button text="Cancel" press=".onCancelDialog" />
-      </endButton>
-    </Dialog>
-  </mvc:View.dependents>
 
 </mvc:View>

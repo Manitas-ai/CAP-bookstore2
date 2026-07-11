@@ -10,9 +10,7 @@
     "@sap/cds": "^10"
   },
   "devDependencies": {
-    "@sap/cds-dk": "^10"
-  },
-  "optionalDependencies": {
+    "@sap/cds-dk": "^10",
     "@cap-js/sqlite": "^1"
   },
   "cds": {

@@ -11,8 +11,8 @@ sap.ui.define([
     //  Lifecycle
     // ----------------------------------------------------------------
     onInit: function () {
-      this._oDialog  = null;   // resolved lazily via byId
-      this._oContext = null;   // current OData context when editing
+      this._oDialog   = null;
+      this._oContext  = null;
       this._bEditMode = false;
     },
 
@@ -24,7 +24,22 @@ sap.ui.define([
     },
 
     // ----------------------------------------------------------------
-    //  Open dialog – Add
+    //  Fragment dialog – lazy creation
+    // ----------------------------------------------------------------
+    _getDialog: function () {
+      if (!this._oDialog) {
+        this._oDialog = sap.ui.xmlfragment(
+          this.getView().getId(),
+          "my.bookstore.adminauthors.fragment.AuthorDialog",
+          this
+        );
+        this.getView().addDependent(this._oDialog);
+      }
+      return this._oDialog;
+    },
+
+    // ----------------------------------------------------------------
+    //  Add Author
     // ----------------------------------------------------------------
     onAddAuthor: function () {
       this._bEditMode = false;
@@ -33,18 +48,18 @@ sap.ui.define([
     },
 
     // ----------------------------------------------------------------
-    //  Open dialog – Edit
+    //  Edit Author
     // ----------------------------------------------------------------
     onEditAuthor: function (oEvent) {
       this._bEditMode = true;
-      var oItem       = oEvent.getSource().getParent().getParent(); // Button > HBox > ColumnListItem
+      var oItem       = oEvent.getSource().getParent().getParent();
       this._oContext  = oItem.getBindingContext();
       var oData       = this._oContext.getObject();
-      this._openDialog("Edit Author", oData.name, oData.country, oData.biography || "");
+      this._openDialog("Edit Author", oData.name, oData.country || "", oData.biography || "");
     },
 
     // ----------------------------------------------------------------
-    //  Delete
+    //  Delete Author
     // ----------------------------------------------------------------
     onDeleteAuthor: function (oEvent) {
       var oItem    = oEvent.getSource().getParent().getParent();
@@ -66,7 +81,7 @@ sap.ui.define([
     },
 
     // ----------------------------------------------------------------
-    //  Save
+    //  Save (create or update)
     // ----------------------------------------------------------------
     onSaveAuthor: function () {
       var sName    = this.byId("inputName").getValue().trim();
@@ -79,7 +94,6 @@ sap.ui.define([
       }
 
       if (this._bEditMode) {
-        // ---- UPDATE ----
         this._oContext.setProperty("name",      sName);
         this._oContext.setProperty("country",   sCountry);
         this._oContext.setProperty("biography", sBio);
@@ -89,36 +103,30 @@ sap.ui.define([
           MessageBox.error("Update failed:\n" + oError.message);
         });
       } else {
-        // ---- CREATE ----
         var oBinding = this.byId("authorsTable").getBinding("items");
-        oBinding.create({
-          name:      sName,
-          country:   sCountry,
-          biography: sBio
-        });
+        oBinding.create({ name: sName, country: sCountry, biography: sBio });
         MessageToast.show("Author created.");
       }
 
-      this.byId("authorDialog").close();
+      this._getDialog().close();
     },
 
     // ----------------------------------------------------------------
     //  Cancel
     // ----------------------------------------------------------------
     onCancelDialog: function () {
-      // Discard any pending create drafts
       if (!this._bEditMode) {
         var oBinding = this.byId("authorsTable").getBinding("items");
         if (oBinding) { oBinding.resetChanges(); }
       }
-      this.byId("authorDialog").close();
+      this._getDialog().close();
     },
 
     // ----------------------------------------------------------------
-    //  Internal helper
+    //  Internal helpers
     // ----------------------------------------------------------------
     _openDialog: function (sTitle, sName, sCountry, sBio) {
-      var oDialog = this.byId("authorDialog");
+      var oDialog = this._getDialog();
       oDialog.setTitle(sTitle);
       this.byId("inputName").setValue(sName);
       this.byId("inputCountry").setValue(sCountry);

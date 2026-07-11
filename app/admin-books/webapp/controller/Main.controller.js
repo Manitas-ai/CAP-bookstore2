@@ -1,34 +1,52 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
-  "sap/ui/model/json/JSONModel",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
   "sap/ui/core/Item"
-], function (Controller, JSONModel, MessageBox, MessageToast, Item) {
+], function (Controller, MessageBox, MessageToast, Item) {
   "use strict";
 
   return Controller.extend("my.bookstore.adminbooks.controller.Main", {
 
     // ----------------------------------------------------------------
-    //  Lifecycle
+    //  Lifecycle  — NO model access here, model may not be ready yet
     // ----------------------------------------------------------------
     onInit: function () {
+      this._oDialog   = null;
       this._bEditMode = false;
       this._oContext  = null;
-      this._loadAuthors();
     },
 
     // ----------------------------------------------------------------
-    //  Load authors into the Select inside the dialog
+    //  Navigation
+    // ----------------------------------------------------------------
+    onHome: function () {
+      window.location.href = "/index.html";
+    },
+
+    // ----------------------------------------------------------------
+    //  Fragment dialog – lazy creation
+    // ----------------------------------------------------------------
+    _getDialog: function () {
+      if (!this._oDialog) {
+        this._oDialog = sap.ui.xmlfragment(
+          this.getView().getId(),
+          "my.bookstore.adminbooks.fragment.BookDialog",
+          this
+        );
+        this.getView().addDependent(this._oDialog);
+      }
+      return this._oDialog;
+    },
+
+    // ----------------------------------------------------------------
+    //  Load authors into the Select (called after dialog exists)
     // ----------------------------------------------------------------
     _loadAuthors: function () {
       var oModel   = this.getOwnerComponent().getModel();
-      var oBinding = oModel.bindList("/Authors", null, null, null, {
-        $orderby: "name"
-      });
+      var oBinding = oModel.bindList("/Authors", null, null, null, { $orderby: "name" });
       oBinding.requestContexts().then(function (aContexts) {
         var oSelect = this.byId("selectAuthor");
-        // Remove old items except the placeholder (index 0)
         while (oSelect.getItems().length > 1) {
           oSelect.removeItem(1);
         }
@@ -44,18 +62,12 @@ sap.ui.define([
     },
 
     // ----------------------------------------------------------------
-    //  Navigation
-    // ----------------------------------------------------------------
-    onHome: function () {
-      window.location.href = "/index.html";
-    },
-
-    // ----------------------------------------------------------------
     //  Add Book
     // ----------------------------------------------------------------
     onAddBook: function () {
       this._bEditMode = false;
       this._oContext  = null;
+      this._getDialog();       // ensure dialog exists before _loadAuthors
       this._loadAuthors();
       this._openDialog("Add Book", "", "", "", "", "", "");
     },
@@ -68,15 +80,16 @@ sap.ui.define([
       var oItem       = oEvent.getSource().getParent().getParent();
       this._oContext  = oItem.getBindingContext();
       var oData       = this._oContext.getObject();
+      this._getDialog();
       this._loadAuthors();
       this._openDialog(
         "Edit Book",
-        oData.title             || "",
-        oData.author_ID         || "",
-        oData.category          || "",
-        oData.publicationYear   ? String(oData.publicationYear) : "",
-        oData.price             ? String(oData.price)           : "",
-        oData.description       || ""
+        oData.title           || "",
+        oData.author_ID       || "",
+        oData.category        || "",
+        oData.publicationYear ? String(oData.publicationYear) : "",
+        oData.price           ? String(oData.price)           : "",
+        oData.description     || ""
       );
     },
 
@@ -103,7 +116,7 @@ sap.ui.define([
     },
 
     // ----------------------------------------------------------------
-    //  Save Book
+    //  Save (create or update)
     // ----------------------------------------------------------------
     onSaveBook: function () {
       var sTitle       = this.byId("inputTitle").getValue().trim();
@@ -125,14 +138,13 @@ sap.ui.define([
       var oPayload = {
         title:           sTitle,
         author_ID:       sAuthorID,
-        category:        sCategory  || null,
-        publicationYear: sYear      ? parseInt(sYear,  10) : null,
-        price:           sPrice     ? parseFloat(sPrice)   : null,
+        category:        sCategory    || null,
+        publicationYear: sYear        ? parseInt(sYear,  10) : null,
+        price:           sPrice       ? parseFloat(sPrice)   : null,
         description:     sDescription || null
       };
 
       if (this._bEditMode) {
-        // ---- UPDATE ----
         Object.keys(oPayload).forEach(function (sKey) {
           this._oContext.setProperty(sKey, oPayload[sKey]);
         }.bind(this));
@@ -142,13 +154,12 @@ sap.ui.define([
           MessageBox.error("Update failed:\n" + oError.message);
         });
       } else {
-        // ---- CREATE ----
         var oBinding = this.byId("booksTable").getBinding("items");
         oBinding.create(oPayload);
         MessageToast.show("Book created.");
       }
 
-      this.byId("bookDialog").close();
+      this._getDialog().close();
     },
 
     // ----------------------------------------------------------------
@@ -159,14 +170,14 @@ sap.ui.define([
         var oBinding = this.byId("booksTable").getBinding("items");
         if (oBinding) { oBinding.resetChanges(); }
       }
-      this.byId("bookDialog").close();
+      this._getDialog().close();
     },
 
     // ----------------------------------------------------------------
-    //  Internal helper
+    //  Internal helpers
     // ----------------------------------------------------------------
     _openDialog: function (sTitle, sBookTitle, sAuthorID, sCategory, sYear, sPrice, sDesc) {
-      var oDialog = this.byId("bookDialog");
+      var oDialog = this._getDialog();
       oDialog.setTitle(sTitle);
       this.byId("inputTitle").setValue(sBookTitle);
       this.byId("selectAuthor").setSelectedKey(sAuthorID);
