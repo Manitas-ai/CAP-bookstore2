@@ -10,6 +10,7 @@ build-parameters:
       commands:
         - npm install
         - ./node_modules/.bin/cds build --production
+        - npm install @sap/xssec --prefix gen/srv --save
         - cp -r app gen/srv/app
 modules:
   - name: bookstore2-srv
