@@ -18,6 +18,8 @@ modules:
     parameters:
       instances: 1
       buildpack: nodejs_buildpack
+    properties:
+      CDS_CONFIG: '{"requires":{"auth":{"kind":"dummy"}}}'
     build-parameters:
       builder: npm-ci
     provides:
